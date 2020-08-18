@@ -59,7 +59,7 @@
 <meta property="og:description" content="http服务中参数校验是非常重要的一环，go-playground&#x2F;validator是golang非常好用的开源库，它通过给struct添加tag的方式，自动完成参数的校验。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-05-13T02:19:20.000Z">
-<meta property="article:modified_time" content="2020-05-18T03:13:09.784Z">
+<meta property="article:modified_time" content="2020-05-19T02:35:54.700Z">
 <meta property="article:author" content="zs">
 <meta name="twitter:card" content="summary">
 
@@ -206,7 +206,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-05-18 11:13:09" itemprop="dateModified" datetime="2020-05-18T11:13:09+08:00">2020-05-18</time>
+                <time title="修改时间：2020-05-19 10:35:54" itemprop="dateModified" datetime="2020-05-19T10:35:54+08:00">2020-05-19</time>
               </span>
 
           
@@ -247,10 +247,7 @@
 <p>Usage <code>dive</code></p>
 </blockquote>
 <figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Test <span class="keyword">struct</span> &#123;</span><br><span class="line">  [][]<span class="keyword">string</span> with validation tag <span class="string">"gt=0,dive,len=1,dive,required"</span></span><br><span class="line">  <span class="comment">// gt=0 will be applied to []</span></span><br><span class="line">  <span class="comment">// len=1 will be applied to []string</span></span><br><span class="line">  <span class="comment">// required will be applied to string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="跨字段验证"><a href="#跨字段验证" class="headerlink" title="跨字段验证"></a>跨字段验证</h3><blockquote>
-<p>Usage <code>eqfield=Field</code> 必须等于 Field 的值<br>Usage <code>nefield=Field</code> 必须不等于 Field 的值<br>Usage <code>gtfield=Field</code> 必须大于 Field 的值<br>Usage <code>eqcsfield=Other.Field</code> 必须等于 struct Other 中 Field 的值；</p>
-</blockquote>
-<p>比较符号就只有以下这 6 种：</p>
+<h3 id="比较符"><a href="#比较符" class="headerlink" title="比较符"></a>比较符</h3><p>比较符号就只有以下这 6 种：</p>
 <ul>
 <li><code>eq</code> 等于</li>
 <li><code>ne</code> 不等于</li>
@@ -259,6 +256,30 @@
 <li><code>lt</code> 小于</li>
 <li><code>lte</code> 小于等于</li>
 </ul>
+<h3 id="跨字段验证"><a href="#跨字段验证" class="headerlink" title="跨字段验证"></a>跨字段验证</h3><blockquote>
+<p>Usage <code>eqfield=Field</code> 必须等于 Field 的值<br>Usage <code>nefield=Field</code> 必须不等于 Field 的值<br>Usage <code>gtfield=Field</code> 必须大于 Field 的值<br>Usage <code>eqcsfield=Other.Field</code> 必须等于 struct Other 中 Field 的值；</p>
+</blockquote>
+<h3 id="One-Of"><a href="#One-Of" class="headerlink" title="One Of"></a>One Of</h3><blockquote>
+<p>Usage: oneof=5 7 9</p>
+</blockquote>
+<h3 id="Unique"><a href="#Unique" class="headerlink" title="Unique"></a>Unique</h3><blockquote>
+<p>Usage: unique  // for arrays, slices, and maps<br>Usage: unique=field // for slices of structs</p>
+</blockquote>
+<h3 id="Contains"><a href="#Contains" class="headerlink" title="Contains"></a>Contains</h3><blockquote>
+<p>Usage: contains=@ </p>
+</blockquote>
+<h3 id="Excludes"><a href="#Excludes" class="headerlink" title="Excludes"></a>Excludes</h3><blockquote>
+<p>Usage: excludes=@<br>Usage: excludesall=!@#?</p>
+</blockquote>
+<h3 id="Starts-With"><a href="#Starts-With" class="headerlink" title="Starts With"></a>Starts With</h3><blockquote>
+<p>Usage: startswith=hello</p>
+</blockquote>
+<h3 id="Ends-With"><a href="#Ends-With" class="headerlink" title="Ends With"></a>Ends With</h3><blockquote>
+<p>Usage: endswith=hello</p>
+</blockquote>
+<h3 id="字符串类型"><a href="#字符串类型" class="headerlink" title="字符串类型"></a>字符串类型</h3><blockquote>
+<p>Usage: alpha  // ASCII alpha characters  only<br>Usage: numeric  // 数字<br>Usage: email   // email<br>Usage: file       // File Path<br>Usage: url      // must contain a schema eg: http://<br>Usage: ip<br>Usage: ipv4<br>Usage: ipv6<br>Usage: tcp_addr     </p>
+</blockquote>
 
     </div>
 
@@ -280,6 +301,9 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
+                <a href="/2020/05/24/go(20)-benchmark/" rel="prev" title="golang系列(20)-benchmark">
+                  golang系列(20)-benchmark <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
       </footer>
@@ -318,7 +342,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#常见内置标识"><span class="nav-number">1.</span> <span class="nav-text">常见内置标识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#required标识"><span class="nav-number">1.1.</span> <span class="nav-text">required标识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#"><span class="nav-number">1.2.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Skip标识"><span class="nav-number">1.3.</span> <span class="nav-text">Skip标识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Or标识"><span class="nav-number">1.4.</span> <span class="nav-text">Or标识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#omitempty标识"><span class="nav-number">1.5.</span> <span class="nav-text">omitempty标识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dive标识"><span class="nav-number">1.6.</span> <span class="nav-text">Dive标识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#跨字段验证"><span class="nav-number">1.7.</span> <span class="nav-text">跨字段验证</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#常见内置标识"><span class="nav-number">1.</span> <span class="nav-text">常见内置标识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#required标识"><span class="nav-number">1.1.</span> <span class="nav-text">required标识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#"><span class="nav-number">1.2.</span> <span class="nav-text"></span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Skip标识"><span class="nav-number">1.3.</span> <span class="nav-text">Skip标识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Or标识"><span class="nav-number">1.4.</span> <span class="nav-text">Or标识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#omitempty标识"><span class="nav-number">1.5.</span> <span class="nav-text">omitempty标识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dive标识"><span class="nav-number">1.6.</span> <span class="nav-text">Dive标识</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#比较符"><span class="nav-number">1.7.</span> <span class="nav-text">比较符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#跨字段验证"><span class="nav-number">1.8.</span> <span class="nav-text">跨字段验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#One-Of"><span class="nav-number">1.9.</span> <span class="nav-text">One Of</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Unique"><span class="nav-number">1.10.</span> <span class="nav-text">Unique</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Contains"><span class="nav-number">1.11.</span> <span class="nav-text">Contains</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Excludes"><span class="nav-number">1.12.</span> <span class="nav-text">Excludes</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Starts-With"><span class="nav-number">1.13.</span> <span class="nav-text">Starts With</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ends-With"><span class="nav-number">1.14.</span> <span class="nav-text">Ends With</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串类型"><span class="nav-number">1.15.</span> <span class="nav-text">字符串类型</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -332,7 +356,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-count">32</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
