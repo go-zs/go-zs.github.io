@@ -58,17 +58,17 @@
 <meta property="og:site_name" content="zs的技术博客">
 <meta property="og:description" content="很多时候需要在服务器上进行调试，goland配合golang的debug工具dlv可以非常容易的实现远程开发调试。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/2020/08/25/remote/deployment.jpg">
+<meta property="og:image" content="http://yoursite.com/2020/08/25/remote/deployment.png">
 <meta property="og:image" content="http://yoursite.com/2020/08/25/remote/mapping.jpg">
 <meta property="og:image" content="http://yoursite.com/2020/08/25/remote/auto.jpg">
 <meta property="og:image" content="http://yoursite.com/2020/08/25/remote/dlv.png">
 <meta property="og:image" content="http://yoursite.com/2020/08/25/remote/demo.png">
 <meta property="og:image" content="http://yoursite.com/2020/08/25/remote/debug.png">
 <meta property="article:published_time" content="2020-08-25T02:09:23.000Z">
-<meta property="article:modified_time" content="2020-08-25T02:47:59.413Z">
+<meta property="article:modified_time" content="2020-08-25T14:05:52.776Z">
 <meta property="article:author" content="zs">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2020/08/25/remote/deployment.jpg">
+<meta name="twitter:image" content="http://yoursite.com/2020/08/25/remote/deployment.png">
 
 <link rel="canonical" href="http://yoursite.com/2020/08/25/remote/">
 
@@ -207,7 +207,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-08-25 10:09:23 / 修改时间：10:47:59" itemprop="dateCreated datePublished" datetime="2020-08-25T10:09:23+08:00">2020-08-25</time>
+              <time title="创建时间：2020-08-25 10:09:23 / 修改时间：22:05:52" itemprop="dateCreated datePublished" datetime="2020-08-25T10:09:23+08:00">2020-08-25</time>
             </span>
 
           
@@ -225,7 +225,7 @@
 <a id="more"></a>
 
 <h2 id="1-配置sftp"><a href="#1-配置sftp" class="headerlink" title="1.配置sftp"></a>1.配置sftp</h2><h3 id="首先我们需要实现代码的实时同步。"><a href="#首先我们需要实现代码的实时同步。" class="headerlink" title="首先我们需要实现代码的实时同步。"></a>首先我们需要实现代码的实时同步。</h3><p>Goland菜单: Tools -&gt; Deployment -&gt; Configuration</p>
-<p><img src="/2020/08/25/remote/deployment.jpg" alt="deployment"></p>
+<p><img src="/2020/08/25/remote/deployment.png" alt="deployment"></p>
 <h3 id="配置本地目录与远端的映射"><a href="#配置本地目录与远端的映射" class="headerlink" title="配置本地目录与远端的映射"></a>配置本地目录与远端的映射</h3><p>配置目录映射也非常简单</p>
 <p><img src="/2020/08/25/remote/mapping.jpg" alt="mapping"></p>
 <h3 id="开启自动同步"><a href="#开启自动同步" class="headerlink" title="开启自动同步"></a>开启自动同步</h3><p>开启自动同步后，<code>goland</code>会在<code>save</code>的时候自动同步远端</p>
