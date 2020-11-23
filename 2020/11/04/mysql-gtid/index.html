@@ -51,21 +51,19 @@
   };
 </script>
 
-  <meta name="description" content="最近双十一买了新购了一台促销服务器，配置环境的时候，在配置ssh公钥免密登录的地方小小踩了一下坑…">
+  <meta name="description" content="GTID是MySQL5.6版本的新特性，其全称是Global Transaction Identifier，可简化MySQL的主从切换以及Failover。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="CentOS配置ssh免密登录">
-<meta property="og:url" content="http://yoursite.com/2019/11/13/ssh/index.html">
+<meta property="og:title" content="MySQL GTID详解">
+<meta property="og:url" content="http://yoursite.com/2020/11/04/mysql-gtid/index.html">
 <meta property="og:site_name" content="zs的技术博客">
-<meta property="og:description" content="最近双十一买了新购了一台促销服务器，配置环境的时候，在配置ssh公钥免密登录的地方小小踩了一下坑…">
+<meta property="og:description" content="GTID是MySQL5.6版本的新特性，其全称是Global Transaction Identifier，可简化MySQL的主从切换以及Failover。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="http://yoursite.com/2019/11/13/ssh/ssh-login-error.jpg">
-<meta property="article:published_time" content="2019-11-13T07:00:48.000Z">
-<meta property="article:modified_time" content="2019-11-13T07:00:48.000Z">
+<meta property="article:published_time" content="2020-11-04T08:25:55.000Z">
+<meta property="article:modified_time" content="2020-11-23T02:07:08.740Z">
 <meta property="article:author" content="zs">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://yoursite.com/2019/11/13/ssh/ssh-login-error.jpg">
 
-<link rel="canonical" href="http://yoursite.com/2019/11/13/ssh/">
+<link rel="canonical" href="http://yoursite.com/2020/11/04/mysql-gtid/">
 
 
 <script id="page-configurations">
@@ -79,7 +77,7 @@
   };
 </script>
 
-  <title>CentOS配置ssh免密登录 | zs的技术博客</title>
+  <title>MySQL GTID详解 | zs的技术博客</title>
   
 
 
@@ -178,7 +176,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/13/ssh/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/11/04/mysql-gtid/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -191,7 +189,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          CentOS配置ssh免密登录
+          MySQL GTID详解
         </h1>
 
         <div class="post-meta">
@@ -201,8 +199,15 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2019-11-13 15:00:48" itemprop="dateCreated datePublished" datetime="2019-11-13T15:00:48+08:00">2019-11-13</time>
+              <time title="创建时间：2020-11-04 16:25:55" itemprop="dateCreated datePublished" datetime="2020-11-04T16:25:55+08:00">2020-11-04</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-11-23 10:07:08" itemprop="dateModified" datetime="2020-11-23T10:07:08+08:00">2020-11-23</time>
+              </span>
 
           
 
@@ -215,32 +220,22 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>最近双十一买了新购了一台促销服务器，配置环境的时候，在配置<code>ssh</code>公钥免密登录的地方小小踩了一下坑…</p>
+        <p><code>GTID</code>是<code>MySQL</code>5.6版本的新特性，其全称是<code>Global Transaction Identifier</code>，可简化<code>MySQL</code>的主从切换以及<code>Failover</code>。</p>
 <a id="more"></a>
 
-<ol>
-<li><p>在客户端上生成密钥对并复制</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ssh-gen</span><br><span class="line">cd ~/.ssh </span><br><span class="line">cat id_rsa.pub</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>服务端配置SSH，打开密钥登录功能</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo vim /etc/ssh/sshd_config # 编辑文件</span><br><span class="line"><span class="meta">#</span><span class="bash"> add 如下配置</span></span><br><span class="line">RSAAuthentication yes</span><br><span class="line">PubkeyAuthentication yes</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>服务器配置登录公钥</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cd ~/.ssh </span><br><span class="line"><span class="meta">#</span><span class="bash"> or 不存在此文件夹</span></span><br><span class="line">mkdir ~/.ssh</span><br><span class="line"></span><br><span class="line">vim ~/.ssh/authorized_keys</span><br><span class="line"><span class="meta">#</span><span class="bash"> add 前面生成的公钥</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>重启服务器SSH服务</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service sshd restart</span><br></pre></td></tr></table></figure>
 
-</li>
-</ol>
-<p>完成之后，尝试下发现还是无法登录，检查无果。。没办法，只能查日志</p>
-<p><img src="/2019/11/13/ssh/ssh-login-error.jpg" alt="avatar"></p>
-<p>恍然大悟这里还有个小坑，文件夹权限不匹配也是无法登录的~</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">chmod 700 ~&#x2F;.ssh</span><br><span class="line">chmod 600 ~&#x2F;.ssh&#x2F;authorized_keys</span><br><span class="line">chown $(whoami):$(whoami) .ssh</span><br><span class="line">chown $(whoami):$(whoami) ~&#x2F;.ssh&#x2F;authorized_keys</span><br></pre></td></tr></table></figure>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p><code>GTID</code>用于在<code>Binlog</code>中唯一标识一个事务。当事务提交时，<code>MySQL</code>在写binlog的时候，会先写一个特殊的<code>Binlog Event</code>，类型为<code>GTID_Event</code>，指定下一个事务的<code>GTID</code>，然后再写事务的<code>Binlog</code>。主从同步时<code>GTID_Event</code>和事务的<code>Binlog</code>都会传递到从库，从库在执行的时候也是用同样的<code>GTID</code>去写<code>binlog</code>，这样主从同步以后，就可通过<code>GTID</code>确定从库同步到的位置了。也就是说，无论是级联情况，还是一主多从情况，都可以通过<code>GTID</code>自动定位，而无需像之前那样通过<code>File_name</code>和<code>File_position</code>定位了。</p>
+<h2 id="构成"><a href="#构成" class="headerlink" title="构成"></a>构成</h2><ul>
+<li>GTID = server_uuid:transaction_id </li>
+<li>server_uuid 来源于 <code>auto.cnf</code>,服务的唯一标识，<code>MySQL</code>使用机器网卡、当前时间、随机数等拼接成一个128bit的uuid</li>
+<li>transaction_id <code>InnoDB</code> 每一个事物都存在一个事务唯一ID, 从 <code>1</code> 开始的自增计数，表示在这个主库上执行的第 <code>n</code> 个事务</li>
+<li>GTID: 在一组复制中，全局唯一</li>
+</ul>
+<h2 id="开启GTID"><a href="#开启GTID" class="headerlink" title="开启GTID"></a>开启GTID</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gtid_mode&#x3D;ON(必选)  </span><br><span class="line">enforce-gtid-consistency（必选）</span><br><span class="line">log_bin&#x3D;ON（可选）--高可用切换，最好设置ON  </span><br><span class="line">log-slave-updates&#x3D;ON（可选）--高可用切换，最好设置ON</span><br></pre></td></tr></table></figure>
 
+<h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><p><code>GTID</code>的最大特性就是它的<code>Failover</code>能力，如下架构，当主库<code>A crash</code>时，需要进行主从切换，将B或C其中一台提升为主，传统模式我们无法确认哪台数据较新，由于同一个事务在每台机器上所在的<code>binlog</code>名字和位置都不一样，那么怎么找到C当前同步停止点，对应B的master_log_file和master_log_pos，需要通过程序对比或者借助<code>MHA</code>等工具。</p>
+<p><code>GTID</code>出现后，这个问题就显得非常简单。由于同一事务的<code>GTID</code>在所有节点上的值一致，那么根据C当前停止点的<code>GTID</code>就能唯一定位到B上的<code>GTID</code>。甚至由于<code>MASTER_AUTO_POSITION</code>功能的出现，我们都不需要知道<code>GTID</code>的具体值，直接使用<code>CHANGE MASTER TO MASTER_HOST=&#39;xxx&#39;</code>, <code>MASTER_AUTO_POSITION=1</code>命令就可以直接完成<code>failover</code>的工作。</p>
 
-<p>如果尝试登录还是需要密码，可以通过服务器ssh日志错误一一排查下~</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd /var/log</span><br><span class="line">sudo tail -f /var/log</span><br></pre></td></tr></table></figure>
     </div>
 
     
@@ -253,17 +248,14 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/2019/11/10/frpc/" rel="next" title="frp内网穿透教程">
-                  <i class="fa fa-chevron-left"></i> frp内网穿透教程
+                <a href="/2020/11/04/go-canal/" rel="next" title="golang版Canal源码阅读">
+                  <i class="fa fa-chevron-left"></i> golang版Canal源码阅读
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/2019/11/19/date-2019-11-19/" rel="prev" title="golang系列(8)——time.Time分析">
-                  golang系列(8)——time.Time分析 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
       </footer>
@@ -302,6 +294,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#介绍"><span class="nav-number">1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#构成"><span class="nav-number">2.</span> <span class="nav-text">构成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开启GTID"><span class="nav-number">3.</span> <span class="nav-text">开启GTID</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#功能"><span class="nav-number">4.</span> <span class="nav-text">功能</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
