@@ -59,7 +59,7 @@
 <meta property="og:description" content="GTID是MySQL5.6版本的新特性，其全称是Global Transaction Identifier，可简化MySQL的主从切换以及Failover。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-11-04T08:25:55.000Z">
-<meta property="article:modified_time" content="2020-11-23T02:07:08.740Z">
+<meta property="article:modified_time" content="2020-11-23T02:10:29.799Z">
 <meta property="article:author" content="zs">
 <meta name="twitter:card" content="summary">
 
@@ -206,7 +206,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-11-23 10:07:08" itemprop="dateModified" datetime="2020-11-23T10:07:08+08:00">2020-11-23</time>
+                <time title="修改时间：2020-11-23 10:10:29" itemprop="dateModified" datetime="2020-11-23T10:10:29+08:00">2020-11-23</time>
               </span>
 
           
@@ -233,7 +233,7 @@
 </ul>
 <h2 id="开启GTID"><a href="#开启GTID" class="headerlink" title="开启GTID"></a>开启GTID</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gtid_mode&#x3D;ON(必选)  </span><br><span class="line">enforce-gtid-consistency（必选）</span><br><span class="line">log_bin&#x3D;ON（可选）--高可用切换，最好设置ON  </span><br><span class="line">log-slave-updates&#x3D;ON（可选）--高可用切换，最好设置ON</span><br></pre></td></tr></table></figure>
 
-<h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><p><code>GTID</code>的最大特性就是它的<code>Failover</code>能力，如下架构，当主库<code>A crash</code>时，需要进行主从切换，将B或C其中一台提升为主，传统模式我们无法确认哪台数据较新，由于同一个事务在每台机器上所在的<code>binlog</code>名字和位置都不一样，那么怎么找到C当前同步停止点，对应B的master_log_file和master_log_pos，需要通过程序对比或者借助<code>MHA</code>等工具。</p>
+<h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><p><code>GTID</code>的最大特性就是它的<code>Failover</code>能力，如下架构，当主库<code>A crash</code>时，需要进行主从切换，将B或C其中一台提升为主，传统模式我们无法确认哪台数据较新，由于同一个事务在每台机器上所在的<code>binlog</code>名字和位置都不一样，那么怎么找到C当前同步停止点，对应B的<code>master_log_file</code>和<code>master_log_pos</code>，需要通过程序对比或者借助<code>MHA</code>等工具。</p>
 <p><code>GTID</code>出现后，这个问题就显得非常简单。由于同一事务的<code>GTID</code>在所有节点上的值一致，那么根据C当前停止点的<code>GTID</code>就能唯一定位到B上的<code>GTID</code>。甚至由于<code>MASTER_AUTO_POSITION</code>功能的出现，我们都不需要知道<code>GTID</code>的具体值，直接使用<code>CHANGE MASTER TO MASTER_HOST=&#39;xxx&#39;</code>, <code>MASTER_AUTO_POSITION=1</code>命令就可以直接完成<code>failover</code>的工作。</p>
 
     </div>
