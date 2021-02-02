@@ -51,19 +51,22 @@
   };
 </script>
 
-  <meta name="description" content="最近遇到一个偶尔出现的bug，查看代码却看不出来任何问题。经过反复查看日志后定位到问题出现在 strings.TrimLeft这个函数上。">
+  <meta name="description" content="很多网站登录都接入了谷歌身份验证器，手机验证虽然很安全，但是也很麻烦，如果能在电脑上获取就能大大简化登录。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="golang strings.TrimLeft的坑">
-<meta property="og:url" content="http://yoursite.com/2019/11/21/go-trim/index.html">
+<meta property="og:title" content="身份认证器简化使用">
+<meta property="og:url" content="http://yoursite.com/2021/02/02/google-authenticator/index.html">
 <meta property="og:site_name" content="zs的技术博客">
-<meta property="og:description" content="最近遇到一个偶尔出现的bug，查看代码却看不出来任何问题。经过反复查看日志后定位到问题出现在 strings.TrimLeft这个函数上。">
+<meta property="og:description" content="很多网站登录都接入了谷歌身份验证器，手机验证虽然很安全，但是也很麻烦，如果能在电脑上获取就能大大简化登录。">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2019-11-21T05:01:51.000Z">
-<meta property="article:modified_time" content="2019-11-21T05:01:51.000Z">
+<meta property="og:image" content="https://pic.hupai.pro/img/20210202133142.png">
+<meta property="og:image" content="https://pic.hupai.pro/img/20210202133252.png">
+<meta property="article:published_time" content="2021-02-02T05:27:16.000Z">
+<meta property="article:modified_time" content="2021-02-02T05:54:45.702Z">
 <meta property="article:author" content="zs">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic.hupai.pro/img/20210202133142.png">
 
-<link rel="canonical" href="http://yoursite.com/2019/11/21/go-trim/">
+<link rel="canonical" href="http://yoursite.com/2021/02/02/google-authenticator/">
 
 
 <script id="page-configurations">
@@ -77,7 +80,7 @@
   };
 </script>
 
-  <title>golang strings.TrimLeft的坑 | zs的技术博客</title>
+  <title>身份认证器简化使用 | zs的技术博客</title>
   
 
 
@@ -211,7 +214,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/21/go-trim/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/02/02/google-authenticator/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -224,7 +227,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          golang strings.TrimLeft的坑
+          身份认证器简化使用
         </h1>
 
         <div class="post-meta">
@@ -233,8 +236,9 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2019-11-21 13:01:51" itemprop="dateCreated datePublished" datetime="2019-11-21T13:01:51+08:00">2019-11-21</time>
+              <time title="创建时间：2021-02-02 13:27:16 / 修改时间：13:54:45" itemprop="dateCreated datePublished" datetime="2021-02-02T13:27:16+08:00">2021-02-02</time>
             </span>
 
           
@@ -248,16 +252,36 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p>最近遇到一个偶尔出现的bug，查看代码却看不出来任何问题。经过反复查看日志后定位到问题出现在 <code>strings.TrimLeft</code>这个函数上。</p>
+        <p>很多网站登录都接入了谷歌身份验证器，手机验证虽然很安全，但是也很麻烦，如果能在电脑上获取就能大大简化登录。</p>
 <a id="more"></a>
 
-<p><code>TrimLeft</code>这个函数名称表面上是删除字符串左侧的字符，实际上却不是这样工作的。它的源码注释上也非常清楚的说明了这一点。</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// TrimLeft returns a slice of the string s with all leading</span></span><br><span class="line"><span class="comment">// Unicode code points contained in cutset removed.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// To remove a prefix, use TrimPrefix instead.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TrimLeft</span><span class="params">(s <span class="keyword">string</span>, cutset <span class="keyword">string</span>)</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> s == <span class="string">""</span> || cutset == <span class="string">""</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> s</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> TrimLeftFunc(s, makeCutsetFunc(cutset))</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>谷歌身份验证器最早是谷歌为了减少 Gmail 邮箱遭受恶意攻击而推出的两步验证方式，后来被很多网站支持。使用谷歌身份验证器，可以避免比如不久前发生的 Coinbase 短信二次验证导致的安全事故。开启谷歌身份验证之后，登录账户，除了输入用户名和密码，还需要输入谷歌验证器上的动态密码。</p>
+<p>谷歌验证器上的动态密码，也称为一次性密码，密码按照时间或使用次数不断动态变化（默认 30 秒变更一次）。它和很多银行发行的动态口令卡类似，可以断网使用，只不过前者是谷歌推出的一个 App，后者是专门的一个硬件。</p>
+<h2 id="Chrome插件"><a href="#Chrome插件" class="headerlink" title="Chrome插件"></a>Chrome插件</h2><p>基本上互联网圈都是用的<code>Chrome</code>，我们只需要下载<code>身份认证器</code>这个插件即可。</p>
+<p>打开<code>Chrome</code>商店，搜索<code>身份认证器</code></p>
+<p><img src="https://pic.hupai.pro/img/20210202133142.png" alt></p>
+<p>安装即可。</p>
+<p>安装完成后，在账号绑定界面点击扫码即可。</p>
+<p><img src="https://pic.hupai.pro/img/20210202133252.png" alt></p>
+<h2 id="脚本"><a href="#脚本" class="headerlink" title="脚本"></a>脚本</h2><p>我们在绑定时看到的二维码，实际上是这样的一串内容,<code>xx@gmail.com</code>表示账号名，<code>DDD</code>表示的是加密密钥。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">otpauth:&#x2F;&#x2F;totp&#x2F;xx@gmail.com?secret&#x3D;DDD</span><br></pre></td></tr></table></figure>
 
-<p>参考文档所说，查看<code>strings.TrimPrefix</code>源码如下，这个函数功能才是真正需要的。</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// TrimPrefix returns s without the provided leading prefix string.</span></span><br><span class="line"><span class="comment">// If s doesn't start with prefix, s is returned unchanged.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TrimPrefix</span><span class="params">(s, prefix <span class="keyword">string</span>)</span> <span class="title">string</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> HasPrefix(s, prefix) &#123;</span><br><span class="line">		<span class="keyword">return</span> s[<span class="built_in">len</span>(prefix):]</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> s</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>客户端每30秒使用密钥『DDD』和时间戳通过一种『算法』生成一个6位数字的一次性密码，如『684060』。</p>
+<p>这个算法叫<code>OTP</code>。</p>
+<ol>
+<li>OTP<br>OTP(One-Time Password)译为一次性密码，也称动态口令。是使用密码技术实现的在客户端和服务器之间通过共享秘密的一种认证技术，是一种强认证技术，是增强目前静态口令认证的一种非常方便技术手段，是一种重要的双因素认证技术。</li>
+</ol>
+<p>1.1 OTP的认证原理<br>动态口令的基本认证原理是在认证双方共享密钥，也称种子密钥，并使用的同一个种子密钥对某一个事件计数、或时间值、或者是异步挑战数进行密码算法计算，使用的算法有对称算法、HASH、HMAC，之后比较计算值是否一致进行认证。可以做到一次一个动态口令，使用后作废，口令长度通常为6-8个数字，使用方便，与通常的静态口令认证方式类似.</p>
+<p>1.3 OTP的实现方式<br>时间同步(TOTP)<br>事件同步(HOTP)<br>挑战/应答(OCRA)</p>
+<p>Google身份认证器使用的是<code>HOTP(HMAC-base On-Time Password)</code>译为基于HMAC的一次性密码，也称事件同步的动态密码。</p>
+<p>如之前的插件就是<code>javascript</code>语言的实现。<a href="https://github.com/Authenticator-Extension/Authenticator" target="_blank" rel="noopener">插件地址</a></p>
+<p><code>oath-toolkit</code>这个工具也实现了<code>OTP</code>相关算法，它的<a href="https://www.nongnu.org/oath-toolkit/" target="_blank" rel="noopener">官网</a></p>
+<p><code>mac</code>下安装非常简单，<code>brew install oath-toolkit</code>。</p>
+<p>安装完成后，执行命令<code>oathtool -b --totp &#39;private_key&#39;</code>，注意这个<code>private_key</code>是可以通过手机扫绑定时提供的二维码拿到的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 5YTCB6SOBTYDCOG为密钥</span><br><span class="line">$ oathtool --totp -b 5YTCB6SOBTYDCOG</span><br><span class="line">624309</span><br></pre></td></tr></table></figure>
 
-<p>总结下来，还是单元测试覆盖不够，少量的测试用例下，两个函数表现完全一致，而实际是有本质差别的。。</p>
+<p>可以在<code>~/.bashrc</code>里添加<code>alias pd=&#39;echo &quot;$(oathtool --totp -b 5YTCB6SOBTYDCOG)\c&quot; | pbcopy&#39;</code></p>
+<p>然后就可以通过运行<code>pd</code>，直接将生成的<code>code</code>写入系统粘贴板。</p>
 
     </div>
 
@@ -271,17 +295,14 @@
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/2019/11/19/date-2019-11-19/" rel="next" title="golang系列(8)——time.Time分析">
-                  <i class="fa fa-chevron-left"></i> golang系列(8)——time.Time分析
+                <a href="/2021/02/01/python-coroutine/" rel="next" title="Python(3)——协程">
+                  <i class="fa fa-chevron-left"></i> Python(3)——协程
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/2019/12/01/map-2019-12-01/" rel="prev" title="golang系列(9)——map源码阅读">
-                  golang系列(9)——map源码阅读 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
       </footer>
@@ -320,6 +341,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Chrome插件"><span class="nav-number">1.</span> <span class="nav-text">Chrome插件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#脚本"><span class="nav-number">2.</span> <span class="nav-text">脚本</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
