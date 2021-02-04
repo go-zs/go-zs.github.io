@@ -53,14 +53,15 @@
 
   <meta name="description" content="学习一下gin是如何处理响应以及管理并发请求的。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="go(28)--gin源码阅读(3)">
+<meta property="og:title" content="golang系列(28)--gin源码阅读(3)">
 <meta property="og:url" content="http://yoursite.com/2020/12/19/go-gin-3/index.html">
 <meta property="og:site_name" content="zs的技术博客">
 <meta property="og:description" content="学习一下gin是如何处理响应以及管理并发请求的。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-12-19T06:19:28.000Z">
-<meta property="article:modified_time" content="2020-12-25T02:22:37.437Z">
+<meta property="article:modified_time" content="2021-02-04T03:11:17.670Z">
 <meta property="article:author" content="zs">
+<meta property="article:tag" content="golang">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2020/12/19/go-gin-3/">
@@ -77,7 +78,7 @@
   };
 </script>
 
-  <title>go(28)--gin源码阅读(3) | zs的技术博客</title>
+  <title>golang系列(28)--gin源码阅读(3) | zs的技术博客</title>
   
 
 
@@ -224,7 +225,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          go(28)--gin源码阅读(3)
+          golang系列(28)--gin源码阅读(3)
         </h1>
 
         <div class="post-meta">
@@ -241,8 +242,19 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-12-25 10:22:37" itemprop="dateModified" datetime="2020-12-25T10:22:37+08:00">2020-12-25</time>
+                <time title="修改时间：2021-02-04 11:11:17" itemprop="dateModified" datetime="2021-02-04T11:11:17+08:00">2021-02-04</time>
               </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/golang/" itemprop="url" rel="index">
+                    <span itemprop="name">golang</span>
+                  </a>
+                </span>
+            </span>
 
           
 
@@ -284,21 +296,24 @@
     
 
       <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/golang/" rel="tag"># golang</a>
+          </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/2020/12/19/json-iterator/" rel="next" title="go(29)--高性能JSON解析器`jsoniter`">
-                  <i class="fa fa-chevron-left"></i> go(29)--高性能JSON解析器`jsoniter`
+                <a href="/2020/12/19/json-iterator/" rel="next" title="golang系列(29)--高性能JSON解析器`jsoniter`">
+                  <i class="fa fa-chevron-left"></i> golang系列(29)--高性能JSON解析器`jsoniter`
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/2020/12/25/go-build/" rel="prev" title="go(30)--build参数全解析">
-                  go(30)--build参数全解析 <i class="fa fa-chevron-right"></i>
+                <a href="/2020/12/25/go-build/" rel="prev" title="golang系列(30)--build参数全解析">
+                  golang系列(30)--build参数全解析 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
@@ -352,7 +367,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">72</span>
+          <span class="site-state-item-count">73</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -365,7 +380,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
